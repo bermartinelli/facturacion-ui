@@ -1,0 +1,41 @@
+<nav class=" navbar navbar-fixed-top navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" [routerLink]="['/']" >FACTURACION APP</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/clientes']">Clientes</a>
+          </li>
+          <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item">
+            <a class="nav-link" [routerLink]="['/facturas']">Facturas</a>
+          </li>
+          <li *ngIf="authService.hasRole('ROLE_USER')" class="nav-item">
+            <a class="nav-link" [routerLink]="['/productos']">Productos</a>
+          </li>
+          <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item">
+            <a class="nav-link" [routerLink]="['/usuarios']">Usuarios</a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav navbar-right">
+          <li *ngIf="!authService.isAuthenticated()" class="nav-item">
+            <a class="btn btn-outline-primary" [routerLink]="['/login']" >Sign In</a>
+          </li>
+
+          <li *ngIf="authService.isAuthenticated()" class="dropdown">
+            <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{authService.usuario.nombre}}
+            </a>
+          
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" (click)="logOut()">Logout</a></li>
+            </ul>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>

@@ -1,0 +1,72 @@
+
+
+
+<div class="card">
+    <h5 class="card-header">Clientes</h5>
+    <div class="card-body">
+      <h5 class="card-title">Listado de clientes:</h5>
+
+      <div class="mb-3">
+        
+        <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clientes/form']" routerLinkActive="router-link-active" >Nuevo Cliente</button>
+      </div>
+
+      <div *ngIf="clientes?.length == 0" class="alert alert-info">
+        No hay registros en la base de datos.
+
+      </div>
+
+      <table class="table table-bordered" *ngIf="clientes?.length != 0">
+        <thead>
+            <tr>
+                <th *ngIf ="authService.hasRole('ROLE_USER')" scope="col">id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">fecha</th>
+                <th scope="col">email</th>
+                <th scope="col">Region</th>
+                <th *ngIf ="authService.hasRole('ROLE_ADMIN')"></th>
+                <th *ngIf ="authService.hasRole('ROLE_ADMIN')"></th>
+                <th *ngIf ="authService.hasRole('ROLE_ADMIN')"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cliente of clientes">
+
+                <td *ngIf ="authService.hasRole('ROLE_USER')">
+                  <img *ngIf="cliente?.foto" (click)="abrirModal(cliente)"
+                  class="img img-thumbnail rounded"
+                  src="http://localhost:8080/api/upload/{{cliente.foto}}" alt="{{cliente.foto}}"
+                  style="width: 64px; cursor: pointer;">
+
+                  <img *ngIf="!cliente?.foto" (click)="abrirModal(cliente)"
+                  class="img img-thumbnail rounded"
+                  src="http://localhost:8080/api/upload/blank-profile.jpeg" alt="blankprofile"
+                  style="width: 64px; cursor: pointer;">
+                </td>
+                <td>{{cliente.nombre | titlecase}}</td>
+                <td>{{cliente.apellido | titlecase}}</td>
+                <td>{{cliente.createAt |date }}</td>
+                <td>{{cliente.email}}</td>
+                <td>{{cliente.region.nombre}}</td>
+                <td *ngIf ="authService.hasRole('ROLE_ADMIN')"><button type="button"  [routerLink]="['/facturas/form/', cliente.id]" class="btn btn-success">Crear factura</button></td>
+                <td *ngIf ="authService.hasRole('ROLE_ADMIN')">  
+                  <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" name="editar" [routerLink]="['/clientes/form/', cliente.id]" class="btn btn-primary"> Editar </button>
+                </td>
+                <td *ngIf ="authService.hasRole('ROLE_ADMIN')">  
+                  <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" name="eliminar" [routerLink]="['/clientes']" (click)="delete(cliente)" class="btn btn-danger"> Eliminar </button>
+                </td>
+            </tr>
+        </tbody>
+      </table>
+
+      <paginator-nav *ngIf="paginador" [paginador] = "paginador" > <!-- este ngIf es x la asincronia, y qeu se le asigne el paginador al hijo siempre que ya se haya cargado el componente hijo -->
+
+      </paginator-nav>
+      
+    </div>
+  </div>
+
+  <detalle-cliente *ngIf="clienteSeleccionado" [cliente] = "clienteSeleccionado" >
+
+  </detalle-cliente>

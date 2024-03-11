@@ -1,0 +1,88 @@
+<div class="card bg-dark text-white">
+    <div class="card-header">{{titulo}}</div>
+    <div class= "card-body">
+        
+        <form #clienteForm="ngForm">
+            <div class="form-group row  mb-3">
+                <label for="nombre" class="col-form-label col-sm-2">Nombre</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre"  #nombre="ngModel" required minlength="4"> 
+                   
+                </div>
+            
+            </div>
+
+            <div class="form-group row mb-3">
+                <label for="apellido" class="col-form-label col-sm-2">Apellido</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="cliente.apellido" name="apellido"  #apellido="ngModel" requiered > <!-- required -->
+                    
+                </div>
+            </div>
+
+            <div class="form-group row  mb-3">
+                <label for="apellido" class="col-form-label col-sm-2">Email</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="cliente.email" name="email"   #email="ngModel" required email> <!-- required email -->
+                </div>
+            </div>
+
+            <div class="form-group row  mb-3">
+                <label for="region" class="col-form-label col-sm-2">Region</label>
+                <div class="col-sm-6">
+                    <select [compareWith]="compararRegion" class="form-control" [(ngModel)]="cliente.region" name="region" required=""> <!-- required email -->
+                        <option [ngValue]="undefined" >---Seleccionar region---</option>
+                        <option *ngFor="let region of regiones" [ngValue]="region">{{region.nombre}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="alert alert-danger" *ngIf="nombre.invalid && nombre.dirty">
+                <div *ngIf="nombre.hasError('required')">
+                    Nombre es requerido
+                </div>
+                <div *ngIf="nombre.hasError('minlength')">
+                    Nombre debe tener al menos 4 caracteres
+                </div>
+            </div>
+
+            <div class="alert alert-danger" *ngIf="apellido.invalid && apellido.dirty">
+                <div *ngIf="apellido.hasError('required')">
+                    Apellido es requerido
+                </div>
+            </div>
+
+            <div class="alert alert-danger" *ngIf="email.invalid && email.dirty">
+                <div  *ngIf="email.hasError('required')">
+                    Email es requerido
+                </div>
+                <div  *ngIf="email.hasError('email')">
+                    Email debe tener un formato valido
+                </div>
+            </div>
+
+            <ul class="alert alert-danger " *ngIf="errores.length > 0">
+                <li *ngFor="let err of errores">
+                    {{err}}
+                </li>
+            </ul>
+
+
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <button class="btn btn-primary" role="button" (click)="create()" *ngIf="!cliente.id else elseBlock" [disabled]="!clienteForm.form.valid">CREAR</button>
+
+                    <ng-template #elseBlock>
+                        <button class="btn btn-primary" role="button" (click)="update()" [disabled]="!clienteForm.form.valid">EDITAR</button>
+                    </ng-template>
+                    
+                </div>
+            </div>
+
+        </form>
+
+
+    </div>
+
+
+</div>

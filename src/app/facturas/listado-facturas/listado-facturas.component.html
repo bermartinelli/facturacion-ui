@@ -1,0 +1,45 @@
+<div class="card">
+    <h5 class="card-header">Facturas</h5>
+    <div class="card-body">
+      <h5 class="card-title">Listado de facturas:</h5>
+
+
+      <div *ngIf="facturas?.length == 0" class="alert alert-info">
+        No hay facturas en la base de datos.
+
+      </div>
+
+      <table class="table table-bordered" *ngIf="facturas?.length != 0">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Observacion</th>
+                <th scope="col">Cliente</th>
+                <th *ngIf ="authService.hasRole('ROLE_USER')">ver</th>
+                <th *ngIf ="authService.hasRole('ROLE_ADMIN')">eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let factura of facturas">
+
+                <td *ngIf ="authService.hasRole('ROLE_USER')">
+                  {{factura.id}}
+                </td>
+                <td>{{factura.createAt |date }}</td>
+                <td>{{factura.descripcion}}</td>
+                <td>{{factura.observacion}}</td>
+                <td>{{factura.cliente.nombre}} {{factura.cliente.apellido}}</td>
+                <td><button type="button" [routerLink]="['/facturas/', factura.id]" class="btn btn-primary btn-sm">Detalle</button></td>
+                <td *ngIf ="authService.hasRole('ROLE_ADMIN')"><button type="button" class="btn btn-danger btn-sm" (click)="deleteFactura(factura)">Eliminar</button></td>
+            </tr>
+        </tbody>
+      </table>
+
+      <paginator-nav *ngIf="paginador" [paginador] = "paginador" > <!-- este ngIf es x la asincronia, y qeu se le asigne el paginador al hijo siempre que ya se haya cargado el componente hijo -->
+
+      </paginator-nav>
+      
+    </div>
+  </div>

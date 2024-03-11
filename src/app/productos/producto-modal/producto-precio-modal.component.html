@@ -1,0 +1,37 @@
+<div *ngIf="modalService.modalPrecio" class="abrir-modal animacion fadeIn">
+    <div *ngIf="modalService.modalPrecio" class="modal" tabindex="-1" role="dialog" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">PRECIO ACTUAL</h5>
+                <button type="button" (click)="cerrarModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                
+                    <form class="" #stockForm="ngForm" >
+                        <div class="form-group row mb-3">
+                            <div class="">
+                                <input type="number" class="form-control" [(ngModel)]="precioAnterior" name="precio"  #stock="ngModel" requiered min="0" max="10000000000" > <!-- required -->
+                            </div>
+                        </div>
+
+                        <div class="alert alert-danger" *ngIf="stock.invalid && stock.dirty">
+                            <div *ngIf="stock.hasError('required')">
+                                Nombre es requerido
+                            </div>
+                            <div *ngIf="stock.hasError('min')">
+                                El valor no puede ser menor a cero
+                            </div>
+                            <div *ngIf="stock.hasError('max')">
+                                El valor no puede tener mas de 10 ceros.
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" (click)="update()" [disabled]="!stockForm.form.valid">EDITAR</button>
+
+                    </form>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+<div class="card">
+    <h5 class="card-header">Productos</h5>
+    <div class="card-body">
+      <h5 class="card-title">Listado de Productos:</h5>
+
+      <div class="mb-3">
+        
+        <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-rounded btn-primary" type="button" [routerLink]="['/productos/form']" routerLinkActive="router-link-active" >Nuevo Producto</button>
+      </div>
+
+      <div *ngIf="productos?.length == 0" class="alert alert-info">
+        No hay Productos en la base de datos.
+
+      </div>
+
+      <table class="table table-bordered" *ngIf="productos?.length != 0">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Stock</th>
+                <th *ngIf ="authService.hasRole('ROLE_USER')"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let producto of productos">
+
+                <td>
+                  {{producto.id}}
+                </td>
+                <td>{{producto.nombre }}</td>
+                <td>{{producto.precio | currency}}</td>
+                <td>{{producto.stock}}</td>
+                <td class="d-flex  justify-content-center" *ngIf ="authService.hasRole('ROLE_USER')">  
+                  <button *ngIf="authService.hasRole('ROLE_USER')" type="button" name="editar" (click)="abrirModalStock(producto)" class="btn btn-success me-3"> Stock </button>
+                  <button *ngIf="authService.hasRole('ROLE_USER')" type="button" name="editar" (click)="abrirModalPrecio(producto)" class="btn btn-primary me-3">Precio</button>
+                  <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" name="eliminar" [routerLink]="['/productos']" (click)="delete(producto)" class="btn btn-danger"> Eliminar </button>
+                </td> 
+                    
+            </tr>
+        </tbody>
+      </table>
+
+      <paginator-nav *ngIf="paginador" [paginador] = "paginador" > <!-- este ngIf es x la asincronia, y qeu se le asigne el paginador al hijo siempre que ya se haya cargado el componente hijo -->
+
+      </paginator-nav>
+      
+    </div>
+  </div>
+
+  <producto-modal *ngIf="productoSeleccionado" [producto]="productoSeleccionado" [stockAnterior]="stockAnterior"></producto-modal>
+
+  <producto-precio-modal *ngIf="productoSeleccionado" [producto]="productoSeleccionado" [precioAnterior]="precioAnterior"></producto-precio-modal>
